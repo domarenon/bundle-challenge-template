@@ -1,0 +1,104 @@
+{% assign bundle = bundle_product %}
+{% assign first_available_variant = bundle.variants | where: "available", true | first %}
+
+{% if bundle and first_available_variant %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script type="module" src="{{ 'bundle-component.js' | asset_url }}"></script>
+
+  {% assign variant_images = '' %}
+  {% assign swatch_colors = '' %}
+
+  {% assign variant_data = bundle.variants | map: "id" %}
+  {% capture variant_images_json %}
+  {
+    {% for variant in bundle.variants %}
+      "{{ variant.id }}": [
+          {% for img in variant.metafields.custom.gallery_images.value %}
+            "{{ img | image_url: width: 600 }}"{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+      ]{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  }
+  {% endcapture %}
+
+  {% capture swatch_colors_json %}
+    {
+    {% for variant in bundle.variants %}
+      "{{ variant.option1 }}": "{{ variant.metafields.custom.swatch_color | default: '' }}"{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    }
+  {% endcapture %}
+
+  <product-bundle
+    data-handle="{{ bundle.handle }}"
+    data-main-id="{{ product.selected_or_first_available_variant.id }}"
+    data-variant-images='{{ variant_images_json | strip_newlines }}'
+    data-swatch-colors='{{ swatch_colors_json | strip_newlines }}'
+  >
+    <template>
+      {% render 'product-bundle-css' %}
+      <div class="bundle-card" role="region" aria-labelledby="bundle-heading">
+        <h3 id="bundle-heading" class="bundle-card__heading">Best Paired with</h3>
+
+        <div class="bundle-card__grid">
+          <div class="bundle-card__images swiper" role="group" aria-label="Bundle product images">
+            <div class="swiper-wrapper">
+              <!-- Primeras imágenes se reemplazan por JS -->
+              <div class="swiper-slide"><img src="" alt="" class="bundle-card__image" /></div>
+            </div>
+            <div class="swiper-button-prev" aria-label="Previous image"></div>
+            <div class="swiper-button-next" aria-label="Next image"></div>
+          </div>
+
+          <div class="bundle-card__info">
+            <p class="bundle-card__title">{{ bundle.title }}</p>
+            <p class="bundle-card__price">
+              <span class="bundle-card__price--discounted">${{ first_available_variant.price | divided_by: 100.0 | times: 0.9 | round: 2 }}</span>
+              <s class="bundle-card__price--original">{{ first_available_variant.price | money_without_trailing_zeros }}</s>
+            </p>
+
+            {% for option in bundle.options_with_values %}
+              <label for="bundle-option-{{ forloop.index0 }}" class="bundle-card__label">{{ option.name }}</label>
+
+              {% if option.name == "Color" %}
+                <div class="bundle-card__swatches" data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-label="Choose color">
+                  {% for value in option.values %}
+                    <button
+                      type="button"
+                      class="bundle-card__swatch"
+                      data-value="{{ value | escape }}"
+                      aria-label="{{ value }}"
+                      aria-pressed="false"
+                      role="radio"
+                    ></button>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <select
+                  id="bundle-option-{{ forloop.index0 }}"
+                  class="bundle-card__select"
+                  data-option-index="{{ forloop.index0 }}"
+                  aria-label="Select {{ option.name }}"
+                >
+                  {% for value in option.values %}
+                    <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+                </select>
+              {% endif %}
+            {% endfor %}
+
+            <button
+              type="button"
+              class="bundle-card__add"
+              data-main-id="{{ product.selected_or_first_available_variant.id }}"
+              data-bundle-id="{{ first_available_variant.id }}"
+              aria-label="Add bundle to cart"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+  </product-bundle>
+{% endif %}
