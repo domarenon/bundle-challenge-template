@@ -1,43 +1,83 @@
-> **This repository is provided **exclusively** for the technical assessment.**  
-> Once the hiring process is complete, all of its contents may be deleted.
+# 🧩 Bundle Challenge – Dev Guide
+
+This project is composed of two parts:
+
+- **Frontend**: Theme extension using a Web Component for product bundles.
+- **Backend**: Shopify Functions (CartTransform) and Checkout UI Extensions.
 
 ---
 
-## Full brief
+## 🖼 Frontend (Theme)
 
-Find the detailed briefing, evaluation criteria, and mock-ups on Notion:  
-🔗 **[Link to the exercise](https://www.notion.so/dtc-pages/Technical-Challenge-Dynamic-Product-Bundle-10-OFF-215075df3d7980809acddb8a95d6db91?source=copy_link)**
+**Repository:**  
+🔗 [https://github.com/domarenon/bundle-challenge-template](https://github.com/domarenon/bundle-challenge-template)
 
----
+**Live Preview Theme:**  
+🔗 [https://bundle-challenge-template.myshopify.com/?preview_theme_id=144702144678](https://bundle-challenge-template.myshopify.com/?preview_theme_id=144702144678)  
+🔒 **Store Password**: `yeofig`
 
-## How to participate
+### 🛠 How to work with the theme
 
-1. **Create a Shopify Partners account** (free) and set up a development store—this is where you’ll preview your work.  
-2. **Fork this repository** to your personal account or organization (**Fork → Create a fork**).  
-3. Work in your fork; we recommend a branch named `feature/solution`.  
-4. **When you’re done**, open a **Pull Request (PR)** from your branch to `main` in *your own fork*.  
-   - Leave the PR **open and unmerged** so we can review commits, diffs, and comments.  
-   - In the PR **description**, paste the **theme preview link** (e.g. `https://your-dev-store.myshopify.com/?preview_theme_id=123456789`) so we can test the bundle live.  
-5. Invite `@hemnys` as a *reviewer* or *collaborator* so we have access to your PR.
+1. Clone the repository:
 
-### Shopify Functions & Checkout UI Extensions
+git clone https://github.com/domarenon/bundle-challenge-template
+cd bundle-challenge-template
 
-| What you must do | Why |
-|------------------|-----|
-| **Create one additional private repository** under your account (e.g. `bundle-backend`). | Keeps code that may require secrets or CI isolated from the theme fork. |
-| In that repo, place **both components**:<br>• `bundle-function` (CartTransform)<br>• `bundle-checkout-extension` (UI Extension) | Centralises backend code while remaining separate from storefront assets. |
-| **Open a dedicated PR to `main` for each component** (two PRs total). | Allows us to review Function and Extension independently. |
-| Add **direct links** to those PRs in the README of your fork. | Fast navigation for the evaluation team. |
+2. Make sure the Shopify CLI is installed:
 
-> **Functions or Extensions delivered without their own PRs will not be accepted.**
+npm install -g @shopify/cli
 
----
+3. Authenticate and pull the theme:
 
-## Minimal best practices
+shopify login
+shopify theme pull --store bundle-challenge-template.myshopify.com
 
-- Small, descriptive commits.  
-- A clear README with local setup, Shopify CLI commands, and test steps.  
+4. Start the development server:
 
----
+shopify theme dev --store bundle-challenge-template.myshopify.com
 
-Good luck with the challenge!
+✅ Important: Any change must be made in a new branch based on main and submitted as a Pull Request.
+
+## 🧠 Backend (Functions & Checkout UI)
+
+**Repository:** 
+🔗 [https://github.com/domarenon/bundle-backend](https://github.com/domarenon/bundle-backend)
+
+### 🔌 Related Pull Requests
+
+🛒 Shopify Function (CartTransform) – Bundle Discount
+PR: [https://github.com/domarenon/bundle-backend/pull/1](https://github.com/domarenon/bundle-backend/pull/1)
+
+🎉 Checkout UI Extension – Discount Banner
+PR: [https://github.com/domarenon/bundle-backend/pull/2](https://github.com/domarenon/bundle-backend/pull/2)
+
+### 🛠 How to work with the backend
+
+1. Clone the repository:
+
+git clone https://github.com/domarenon/bundle-backend
+cd bundle-backend
+
+2. Chose the app:
+
+cd checkout-banner 
+or
+cd bundle-function
+
+3. Install dependencies:
+
+npm install
+
+4. Start the development environment:
+
+npm run dev
+
+5. Build and deploy (if needed):
+
+npm run build
+or
+npm run deploy
+
+## 📌 Final Notes
+
+### Make sure to log in with the Shopify CLI before using dev or deploy
