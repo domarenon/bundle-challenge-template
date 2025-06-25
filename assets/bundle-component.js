@@ -149,13 +149,15 @@ class ProductBundle extends HTMLElement {
 
       if (!bundleId) return;
 
+      const bundlePackId = new Date().getTime();
+
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: [
-            { id: Number(mainId), quantity: 1 },
-            { id: Number(bundleId), quantity: 1 }
+            { id: Number(mainId), quantity: 1, properties: {_bundlePackId: bundlePackId} },
+            { id: Number(bundleId), quantity: 1, properties: {_bundlePackId: bundlePackId} }
           ]
         })
       })

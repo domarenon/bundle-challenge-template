@@ -102,7 +102,21 @@
                         <p class="caption-with-letter-spacing">{{ item.product.vendor }}</p>
                       {%- endif -%}
 
-                      <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
+                      <a href="{{ item.url }}" class="cart-item__name h4 break">
+                        {% if item.item_components.size > 0 %}
+                          {{- item.title -}}
+                        {% else %}
+                          {{- item.product.title | escape -}}
+                        {% endif %}
+                      </a>
+
+                      {% if item.item_components.size > 0 %}
+                        <ul>
+                          {% for component in item.item_components %}
+                            <li>{{ component.title }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
 
                       {%- if item.original_price != item.final_price -%}
                         <div class="cart-item__discounted-prices">
